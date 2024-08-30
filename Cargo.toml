@@ -1,0 +1,33 @@
+[package]
+name = "goauld"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "goauld"
+path = "src/lib.rs"
+
+[[bin]]
+name = "goauld-cli"
+path = "bin/cli.rs"
+
+[profile.release]
+opt-level = "z"
+debug = false
+lto = true
+debug-assertions = false
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[dependencies]
+dynasm = "2.0.0"
+dynasmrt = "2.0.0"
+
+clap = { version = "4.5.4", features = ["derive"] }
+log = "0.4.21"
+nix = { version = "0.29.0", features = ["uio"] }
+proc-maps = "0.3.2"
+simple_logger = "5.0.0"
+goblin = "0.8.0"
+glob = "0.3.1"

@@ -1,0 +1,13 @@
+[package]
+name = "dump_mem"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "dump_mem"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+process_vm_io = "1.0.10"
