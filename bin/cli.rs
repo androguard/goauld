@@ -2,7 +2,6 @@ use clap::Parser;
 use log::{error, info, warn, LevelFilter};
 use simple_logger::SimpleLogger;
 
-
 /// Inject code into a running process using /proc/pid/mem
 #[derive(Parser, Debug)]
 #[command(version, about)]
@@ -42,9 +41,9 @@ fn main() {
     let args = Args::parse();
 
     SimpleLogger::new()
-    .with_level(LevelFilter::Debug)
-    .init()
-    .unwrap();
+        .with_level(LevelFilter::Info)
+        .init()
+        .unwrap();
 
     let mut target_pid = args.pid.unwrap_or(0);
 
@@ -71,7 +70,6 @@ fn main() {
         }
     };
 
-    
     match injector.set_file_path(args.file) {
         Ok(_) => {}
         Err(e) => {
@@ -89,7 +87,7 @@ fn main() {
             std::process::exit(1);
         }
     }
-    
+
     if let Some(func_sym) = &args.func_sym {
         let sym_pair: Vec<&str> = func_sym.split('!').collect();
         if sym_pair.len() != 2 {

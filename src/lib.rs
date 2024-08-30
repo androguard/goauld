@@ -193,11 +193,12 @@ impl Injector {
         loop {
             std::thread::sleep(std::time::Duration::from_millis(1));
             let data = mem.read(self.target_var_sym_addr, 0x8)?;
-            debug!("Waiting ... {:?}", data);
+            //debug!("Waiting ... {:?}", data);
 
             // u64 from val
             new_map = u64::from_le_bytes(data[0..8].try_into().unwrap());
             if (new_map & 0x1 != 0) && (new_map & 0xffff_ffff_ffff_fff0 != 0) {
+                info!("Boom ... 0x{:x}", new_map);
                 break;
             }
         }
@@ -212,7 +213,7 @@ impl Injector {
             mem.write(self.target_func_sym_addr, &self_jmp_stage)?;
         }
 
-        std::thread::sleep(std::time::Duration::from_millis(10000));
+        std::thread::sleep(std::time::Duration::from_millis(1000));
 
         info!("restore original bytes");
         mem.write(self.target_func_sym_addr, &func_original_bytes)?;

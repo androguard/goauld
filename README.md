@@ -70,7 +70,7 @@ adb shell chmod 755 /data/local/tmp/goauld-cli
 ## Examples
 
 Be sure you have the right to write into /proc/PID/mem (defined in this following variable):
-```
+```sh
 sudo sysctl kernel.yama.ptrace_scope=0
 ```
 
@@ -102,12 +102,44 @@ frida -H localhost Gadget -l examples/frida_gadget/test.js
 
 Find out the application to infect and use the cli binary to inject and run the frida gadget shared library for example:
 ```sh
+ps -A |grep package_name
+
+You can copy and change the context of the shared library (but the tool will do it):
+```sh
+adb push frida-gadget-16.3.3-android-arm64.so /data/local/tmp/frida-gadget-android-arm64.so
+chcon -v u:object_r:apk_data_file:s0 f/data/local/tmp/frida-gadget-android-arm64.so
 ```
 
 If you have injected the frida gadget library, in another terminal, you can connect with the frida command line to the Android Phone to the infected process,
 like for example to display a tiny message, but you can also start to hijack any functions:
 ```sh
 frida -U -f re.frida.Gadget -l toast.js
+```
+
+```sh
+x:/data/local/tmp # cat frida-gadget-android-arm64.config
+{
+        "interaction" : {
+                "type": "script",
+                "path": "/data/local/tmp/test.js"
+        }
+}
+```
+
+```sh
+x:/data/local/tmp # cat test.js
+Java.perform(function () {
+    var context = Java.use('android.app.ActivityThread').currentApplication().getApplicationContext();
+
+    Java.scheduleOnMainThread(function() {
+            var toast = Java.use("android.widget.Toast");
+            toast.makeText(Java.use("android.app.ActivityThread").currentApplication().getApplicationContext(), Java.use("java.lang.String").$new("Hello from your Goauld !"), 1).show();
+    });
+});
+```
+
+```sh
+x:/data/local/tmp # ./goauld-cli --pid PID --file frida-gadget-android-arm64.so
 ```
 
 ## Caveats

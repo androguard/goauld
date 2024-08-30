@@ -3,12 +3,12 @@ use crate::error::InjectionError;
 use dynasmrt::{dynasm, DynasmApi, DynasmLabelApi};
 
 pub fn first_shellcode(var_addr: usize, alloc_len: usize) -> Result<Vec<u8>, InjectionError> {
-    debug!("first_shellcode x64");
+    debug!("first_shellcode aarch64");
 
     let mut ops = dynasmrt::aarch64::Assembler::new().unwrap();
     dynasm!(ops
         ; .arch aarch64
-        
+
         ; ->start:
         // check if the bit is set
         ; ldr x6, ->var_addr
@@ -94,7 +94,11 @@ pub fn first_shellcode(var_addr: usize, alloc_len: usize) -> Result<Vec<u8>, Inj
     }
 }
 
-pub fn raw_dlopen_shellcode(dlopen_addr: usize, dlopen_path: String, jmp_addr: usize) -> Result<Vec<u8>, InjectionError> {
+pub fn raw_dlopen_shellcode(
+    dlopen_addr: usize,
+    dlopen_path: String,
+    jmp_addr: usize,
+) -> Result<Vec<u8>, InjectionError> {
     debug!("raw_dlopen_shellcode aarch64");
 
     let mut ops = dynasmrt::aarch64::Assembler::new().unwrap();
