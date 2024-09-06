@@ -2,7 +2,7 @@
 
 # Goauld
 
-> Dynamic instrumentation toolkit for Linux/Android process via /proc/pid/mem, for the [Androguard Project](https://github.com/androguard/androguard).
+> Dynamic injection tool for Linux/Android process via /proc/pid/mem, for the [Androguard Project](https://github.com/androguard/androguard).
 
 Goauld is a simple tool that will allow you to inject a piece of code (a shared libary) in a process without using Ptrace syscall, directly via /proc/pid/mem.
 
